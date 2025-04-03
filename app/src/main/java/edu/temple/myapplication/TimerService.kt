@@ -119,6 +119,4 @@ class TimerService : Service() {
 
         Log.d("TimerService status", "Destroyed")
     }
-
-
 }
