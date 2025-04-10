@@ -10,13 +10,16 @@ import android.os.Handler
 import android.os.IBinder
 import android.os.Looper
 import android.widget.Button
+import android.widget.TextView
 
 class MainActivity : AppCompatActivity() {
 
-    val timerHandler = Handler(Looper.getMainLooper()) {
+    private val timerHandler = Handler(Looper.getMainLooper()) { message ->
+        // Update the UI with the countdown value
+        val countdownValue = message.what
+        findViewById<TextView>(R.id.textView).text = countdownValue.toString()
         true
     }
-
 
     var timerBinder: TimerService.TimerBinder? = null
     private var isBound = false
@@ -24,8 +27,11 @@ class MainActivity : AppCompatActivity() {
     private val serviceConnection = object : ServiceConnection {
         override fun onServiceConnected(name: ComponentName?, service: IBinder?) {
             val binder = service as? TimerService.TimerBinder
-            isBound = binder != null
-
+            if (binder != null) {
+                timerBinder = binder
+                isBound = true
+                timerBinder?.setHandler(timerHandler)
+            }
         }
 
         override fun onServiceDisconnected(name: ComponentName?) {

@@ -43,6 +43,7 @@ class TimerService : Service() {
 
         // Receive updates from Service
         fun setHandler(handler: Handler) {
+
             timerHandler = handler
         }
 
